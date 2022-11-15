@@ -1,5 +1,7 @@
 const clientId = '7c4a342e7c4345dd9aef532c371ceb41';
-const redirectUri = 'http://localhost:3000/';
+// const redirectUri = 'http://localhost:3000/';
+
+const redirectUri = 'https://jamming-assessment-c4o2.vercel.app/'
 
 let accessToken;
 
@@ -53,13 +55,17 @@ const Spotify = {
       return;
     }
 
-    const accessToken = Spotify.getAccessToken();
-    const headers = { Authorization: `Bearer: ${accessToken}` };
+    // const accessToken = Spotify.getAccessToken();
+    const headers = { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' };
     let userId;
+    console.log(accessToken);
+    // console.log(name);
+    // console.log(trackUris);
 
     return fetch('https://api.spotify.com/v1/me',
-    {headers: headers}).then(response => response.json())
-      .then(jsonResponse => {
+    {headers: headers})
+    .then(response => response.json())
+    .then(jsonResponse => {
         userId = jsonResponse.id;
         return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
           headers: headers,
@@ -75,7 +81,7 @@ const Spotify = {
                 body: JSON.stringify({ uris: trackUris }),
               });
           });
-      });
+      }).catch(e => console.log(e));
   }
 };
 
